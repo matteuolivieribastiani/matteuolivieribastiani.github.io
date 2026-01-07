@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="DUbHyKbzQvbLT5CE4csjOeYh7762abYEHbccArTznno" />
+  <title>Matteu Olivieri Bastiani — Expert Cybersécurité Offensive</title>
+  <meta name="description"
+    content="Portfolio de Matteu Olivieri Bastiani, expert en cybersécurité offensive, reverse engineering, exploitation kernel et 0day research.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a24;
+      --bg-card: rgba(18, 18, 26, 0.75);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --accent: #d4af61;
+      --accent-light: #e8c57a;
+      --accent-dark: #b89345;
+      --accent-glow: rgba(212, 175, 97, 0.15);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9a9ab0;
+      --text-muted: #5a5a70;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-accent: rgba(212, 175, 97, 0.15);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 8px 40px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 16px 60px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 40px rgba(212, 175, 97, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient light gradients */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212, 175, 97, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(100, 120, 180, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(212, 175, 97, 0.02) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -2;
+      animation: ambientPulse 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientPulse {
+      0% {
+        opacity: 0.7;
+        transform: scale(1) rotate(0deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1.1) rotate(3deg);
+      }
+    }
+
+    /* Subtle grain texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1rem 2rem;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+
+    nav::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+
+    .nav-logo::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-logo:hover::after {
+      width: 100%;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.4rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.6rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 450;
+      transition: var(--transition);
+      letter-spacing: 0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover::before,
+    .nav-links a.active::before {
+      opacity: 1;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text-primary);
+    }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .burger span {
+      width: 22px;
+      height: 1.5px;
+      background: var(--accent);
+      transition: var(--transition);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      opacity: 0.5;
+      pointer-events: none;
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroGlow {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.6;
+      }
+    }
+
+    .hero-content {
+      max-width: 850px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.55rem 1.4rem;
+      background: rgba(212, 175, 97, 0.06);
+      border: 1px solid var(--border-accent);
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 450;
+      color: var(--accent);
+      margin-bottom: 2.8rem;
+      backdrop-filter: blur(10px);
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-status::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 var(--accent-glow);
+      }
+
+      50% {
+        opacity: 0.7;
+        box-shadow: 0 0 0 6px transparent;
+      }
+    }
+
+    .hero-avatar {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 2.8rem;
+      position: relative;
+      animation: fadeIn 1s ease-out 0.2s both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .hero-avatar::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark), var(--accent-light));
+      border-radius: 50%;
+      opacity: 0.6;
+      z-index: -1;
+      animation: avatarRing 6s linear infinite;
+    }
+
+    @keyframes avatarRing {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hero-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: var(--bg-primary);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg-primary);
+      filter: grayscale(10%) contrast(1.05);
+      transition: var(--transition);
+    }
+
+    .hero-avatar:hover img {
+      filter: grayscale(0%) contrast(1.1);
+      transform: scale(1.03);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.6rem;
+      letter-spacing: -0.025em;
+      animation: fadeInUp 0.9s ease-out 0.3s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      position: relative;
+    }
+
+    .hero-title span::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.85;
+      font-weight: 350;
+      animation: fadeInUp 0.9s ease-out 0.5s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 520;
+      text-decoration: none;
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+      letter-spacing: 0.015em;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.9s ease-out 0.7s both;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: #0a0a0f;
+      box-shadow: 0 4px 20px rgba(212, 175, 97, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(212, 175, 97, 0.35);
+    }
+
+    .btn-secondary {
+      background: var(--bg-glass);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-accent);
+      transform: translateY(-3px);
+    }
+
+    /* Sections */
+    section {
+      padding: 8rem 2rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4.5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 550;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 1.2rem;
+      padding: 0.4rem 1rem;
+      background: var(--accent-glow);
+      border-radius: 50px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.025em;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto;
+      font-weight: 350;
+      line-height: 1.8;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 2.2rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-accent);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.2rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* About */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 1.8rem;
+      font-weight: 350;
+      line-height: 1.85;
+    }
+
+    .about-text strong {
+      color: var(--text-primary);
+      font-weight: 550;
+      position: relative;
+    }
+
+    .about-text strong::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-glow);
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.6rem;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 2rem 1.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stat:hover::before {
+      opacity: 1;
+    }
+
+    .stat:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 450;
+      letter-spacing: 0.02em;
+    }
+
+    /* Projects */
+    .project-card h3 {
+      font-size: 1.18rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 a {
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .project-card h3 a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .project-card h3 a:hover::after {
+      width: 100%;
+    }
+
+    .project-card h3 a:hover {
+      color: var(--accent);
+    }
+
+    .project-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      font-weight: 350;
+      margin-bottom: 1.2rem;
+      line-height: 1.7;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tag {
+      padding: 0.35rem 0.9rem;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      transition: var(--transition);
+    }
+
+    .tag:hover {
+      background: rgba(212, 175, 97, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Skills */
+    .skill-group {
+      margin-bottom: 2.8rem;
+    }
+
+    .skill-group h3 {
+      font-size: 0.95rem;
+      font-weight: 550;
+      margin-bottom: 1.4rem;
+      color: var(--text-primary);
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .skill-group h3::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      list-style: none;
+    }
+
+    .skill-list li {
+      padding: 0.55rem 1.1rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      font-weight: 400;
+    }
+
+    .skill-list li:hover {
+      background: var(--accent-glow);
+      border-color: var(--border-accent);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    /* 0days */
+    .zeroday-card {
+      border-left: 3px solid var(--accent);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 97, 0.02) 100%);
+    }
+
+    .zeroday-card h3 {
+      font-size: 1.08rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .zeroday-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .zeroday-card li {
+      padding: 0.5rem 0;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      font-size: 0.88rem;
+      font-weight: 350;
+      line-height: 1.6;
+      transition: color 0.2s ease;
+    }
+
+    .zeroday-card li:hover {
+      color: var(--text-primary);
+    }
+
+    .zeroday-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+      max-width: 800px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-glow), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 3rem;
+      transition: var(--transition);
+    }
+
+    .timeline-item:hover {
+      transform: translateX(6px);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      transform: translateX(-4px);
+      transition: var(--transition);
+    }
+
+    .timeline-item:hover::before {
+      background: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .timeline-title {
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .timeline-desc {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.85;
+      font-weight: 350;
+    }
+
+    /* Partners */
+    .partner-item {
+      display: flex;
+      gap: 1.4rem;
+      align-items: flex-start;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+
+    .partner-item:hover {
+      padding-left: 0.8rem;
+      background: linear-gradient(90deg, var(--accent-glow), transparent);
+      border-radius: var(--radius-sm);
+    }
+
+    .partner-item:last-child {
+      border-bottom: none;
+    }
+
+    .partner-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #0a0a0f;
+      flex-shrink: 0;
+      font-size: 1.05rem;
+      transition: var(--transition);
+    }
+
+    .partner-item:hover .partner-icon {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .partner-info h4 {
+      font-size: 1rem;
+      font-weight: 550;
+      margin-bottom: 0.3rem;
+    }
+
+    .partner-info p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 350;
+      line-height: 1.6;
+    }
+
+    .partner-info a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .partner-info a:hover {
+      color: var(--accent-light);
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-info>p {
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      font-weight: 350;
+      line-height: 1.8;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+      font-size: 0.95rem;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-sm);
+      background: transparent;
+    }
+
+    .contact-link:hover {
+      color: var(--text-primary);
+      background: var(--accent-glow);
+      transform: translateX(6px);
+    }
+
+    .contact-link svg {
+      width: 20px;
+      height: 20px;
+      transition: var(--transition);
+    }
+
+    .contact-link:hover svg {
+      color: var(--accent);
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 1.1rem 1.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .contact-form textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    #formMessage {
+      padding: 1.2rem;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 450;
+      display: none;
+    }
+
+    #formMessage.success {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--border-accent);
+    }
+
+    #formMessage.error {
+      background: rgba(200, 80, 80, 0.1);
+      color: #e85050;
+      border: 1px solid rgba(200, 80, 80, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 350;
+    }
+
+    /* Scroll to Top */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 2.5rem;
+      right: 2.5rem;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border: none;
+      border-radius: 50%;
+      color: #0a0a0f;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 999;
+      box-shadow: var(--shadow-md);
+    }
+
+    #scrollTopBtn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #scrollTopBtn:hover {
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .burger {
+        display: flex;
+      }
+
+      .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(12, 12, 12, 0.98);
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .hero {
+        padding: 7rem 1.5rem 3rem;
+      }
+
+      section {
+        padding: 5rem 1.5rem;
+      }
+    }
+
+    /* Fade animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">Matteu O.B.</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="active">Accueil</a></li>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#realisations">Projets</a></li>
+        <li><a href="#competences">Compétences</a></li>
+        <li><a href="#0day">Recherche</a></li>
+        <li><a href="#experience">Parcours</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="burger" onclick="toggleNav()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-status">Disponible pour missions</div>
+      <div class="hero-avatar">
+        <img src="https://avatars.githubusercontent.com/u/217643410?v=4" alt="Matteu Olivieri Bastiani" loading="lazy">
+      </div>
+      <h1 class="hero-title">Matteu Olivieri <span>Bastiani</span></h1>
+      <p class="hero-subtitle">Expert en cybersécurité offensive, reverse engineering et recherche de vulnérabilités. Je
+        découvre les failles que d'autres ne voient pas.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Me contacter</a>
+        <a href="https://github.com/NSAexploit" target="_blank" rel="noopener" class="btn btn-secondary">Voir mon
+          GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">À propos</span>
+      <h2 class="section-title">Qui suis-je</h2>
+    </div>
+    <div class="about-content">
+      <div class="about-text">
+        <p>Acteur indépendant en <strong>cybersécurité offensive</strong> et reverse engineering, je me spécialise dans
+          la recherche de vulnérabilités critiques sur des systèmes complexes : kernel Linux, Android, baseband télécom,
+          applications majeures.</p>
+        <p><strong>Domaines d'expertise</strong> — Tests d'intrusion, exploitation kernel, reverse engineering avancé,
+          sécurité mobile et télécom, threat hunting, développement d'exploits.</p>
+        <p><strong>Approche</strong> — Je ne teste pas simplement des failles connues. Je cherche à comprendre la
+          logique profonde des systèmes pour identifier des vulnérabilités inédites. Éthique, rigueur et confidentialité
+          sont au cœur de ma pratique.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-value">6+</div>
+          <div class="stat-label">0days découverts</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Top 8%</div>
+          <div class="stat-label">TryHackMe</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Communautés créées</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1000+</div>
+          <div class="stat-label">Membres total</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="realisations" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Projets</span>
+      <h2 class="section-title">Réalisations et recherches</h2>
+      <p class="section-desc">Travaux publiés et contributions techniques</p>
+    </div>
+    <div class="grid-3">
+      <div class="card project-card">
+        <h3><a href="https://github.com/NSAexploit" target="_blank" rel="noopener">Profil GitHub</a></h3>
+        <p>Ensemble de mes travaux, scripts, PoC et publications techniques en sécurité offensive.</p>
+        <div class="project-tags">
+          <span class="tag">Security</span>
+          <span class="tag">Exploits</span>
+          <span class="tag">Tools</span>
+        </div>
+      </div>
+      <div class="card project-card">
+        <h3><a href="https://github.com/NSAexploit/LinuxKernelMapping-Desync" target="_blank" rel="noopener">Kernel
+            Mapping Desync</a></h3>
+        <p>Vulnérabilité de désynchronisation de mapping mémoire dans le kernel Linux via remap_pfn_range.</p>
+        <div class="project-tags">
+          <span class="tag">Kernel</span>
+          <span class="tag">0day</span>
+          <span class="tag">LPE</span>
+        </div>
+      </div>
+      <div class="card project-card">
+        <h3><a href="https://github.com/NSAexploit/linux-btrfs-write-what-where" target="_blank" rel="noopener">BTRFS
+            Write-What-Where</a></h3>
+        <p>Vulnérabilité d'écriture arbitraire dans le système de fichiers BTRFS permettant l'exécution de code.</p>
+        <div class="project-tags">
+          <span class="tag">BTRFS</span>
+          <span class="tag">Kernel</span>
+          <span class="tag">RCE</span>
+        </div>
+      </div>
+      <div class="card project-card">
+        <h3>Baseband RF Injection</h3>
+        <p>Recherche sur l'injection de signaux radiofréquences au niveau de la bande de base pour interception de
+          trafic.</p>
+        <div class="project-tags">
+          <span class="tag">GSM</span>
+          <span class="tag">RF</span>
+          <span class="tag">Mobile</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="competences" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Compétences</span>
+      <h2 class="section-title">Expertise technique</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="skill-group">
+          <h3>Exploitation Kernel et Systèmes</h3>
+          <ul class="skill-list">
+            <li>Linux Kernel Exploitation</li>
+            <li>Élévation de privilèges</li>
+            <li>Bypass SMEP/SMAP</li>
+            <li>Write-What-Where</li>
+            <li>Développement de rootkits</li>
+            <li>Memory Mapping</li>
+            <li>Race Conditions</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Reverse Engineering</h3>
+          <ul class="skill-list">
+            <li>IDA Pro</li>
+            <li>Ghidra</li>
+            <li>Analyse APK</li>
+            <li>Bytecode Dalvik</li>
+            <li>Binaires ELF/PE</li>
+            <li>Analyse firmware</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="skill-group">
+          <h3>Mobile et Télécom</h3>
+          <ul class="skill-list">
+            <li>Sécurité Android</li>
+            <li>Exploitation baseband</li>
+            <li>GSM/LTE</li>
+            <li>Manipulation SRTP</li>
+            <li>Analyse RF</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Développement offensif</h3>
+          <ul class="skill-list">
+            <li>Python</li>
+            <li>C/C++</li>
+            <li>Bash</li>
+            <li>Développement d'exploits</li>
+            <li>Création de payloads</li>
+            <li>Automatisation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 0days -->
+  <section id="0day" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Recherche</span>
+      <h2 class="section-title">Vulnérabilités découvertes</h2>
+      <p class="section-desc">0days identifiés sur des systèmes critiques</p>
+    </div>
+    <div class="grid-3">
+      <div class="card zeroday-card">
+        <h3>Kernel Panic RCE — Smartphones</h3>
+        <ul>
+          <li>Exploitation du kernel panic pour exécution de code</li>
+          <li>Contournement des sécurités mémoire VMA</li>
+          <li>Transformation possible en attaque 0click</li>
+        </ul>
+      </div>
+      <div class="card zeroday-card">
+        <h3>Messenger — Facebook</h3>
+        <ul>
+          <li>Manipulation de la génération de Session ID</li>
+          <li>Extraction de clés cryptographiques</li>
+          <li>Prise de contrôle de compte</li>
+        </ul>
+      </div>
+      <div class="card zeroday-card">
+        <h3>GSM Baseband — Samsung S20</h3>
+        <ul>
+          <li>Injection de code dans le firmware modem</li>
+          <li>Interception de communications GSM</li>
+          <li>Manipulation des clés Cipher/SRTP</li>
+        </ul>
+      </div>
+      <div class="card zeroday-card">
+        <h3>Mapping Sabotage — mmap.c</h3>
+        <ul>
+          <li>Sabotage du mapping mémoire kernel</li>
+          <li>Élévation de privilèges avec persistence</li>
+          <li>Bypass SMEP/SMAP</li>
+        </ul>
+      </div>
+      <div class="card zeroday-card">
+        <h3>Write-What-Where — BTRFS</h3>
+        <ul>
+          <li>Pointeurs utilisateurs non validés</li>
+          <li>Écriture arbitraire dans le kernel</li>
+          <li>Compromission système complète</li>
+        </ul>
+      </div>
+      <div class="card zeroday-card">
+        <h3>Kernel Mapping Desync</h3>
+        <ul>
+          <li>Inversion logique get_file/fput</li>
+          <li>Crash mapping contrôlé</li>
+          <li>Exploitation multi-chaîne</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Parcours</span>
+      <h2 class="section-title">Expérience et missions</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-title">Collaborations professionnelles</div>
+        <div class="timeline-desc">
+          Collaboration avec Microsoft Security Team pour le signalement de vulnérabilités. Échanges avec Crowdfense
+          pour l'analyse de 0days. Retour de ZDI sur la complexité technique des exploits soumis. Reconnaissance par la
+          DGSI et DGSE dès 18 ans.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-title">Recherche sur le kernel Linux</div>
+        <div class="timeline-desc">
+          Exploitation de vulnérabilités Write-What-Where sur des drivers Linux. Injection de code et élévation de
+          privilèges via kernel panic. Analyse et manipulation de fonctions critiques : fput, fget, memcpy.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-title">Reverse engineering avancé</div>
+        <div class="timeline-desc">
+          Décompilation avec IDA et Ghidra. Cartographie des fonctions critiques. Analyse logique pour identification de
+          vulnérabilités. Création de scénarios d'attaque 0day multi-chaîne.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-title">Développement offensif</div>
+        <div class="timeline-desc">
+          Développement de rootkits, bootkits et outils d'interception. Création d'extracteurs de données sensibles. Top
+          8% sur TryHackMe en moins de 3 heures.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Groups & Partners -->
+  <section id="groupes" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Communautés</span>
+      <h2 class="section-title">Groupes et partenariats</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Groupes fondés</h3>
+        <div class="partner-item">
+          <div class="partner-icon">H</div>
+          <div class="partner-info">
+            <h4>Havoc</h4>
+            <p>Communauté de 140 membres</p>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">A</div>
+          <div class="partner-info">
+            <h4>ADM</h4>
+            <p>Communauté de 231 membres</p>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">I</div>
+          <div class="partner-info">
+            <h4>IHS</h4>
+            <p>Plus de 1000 membres — réouverture en cours</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.1rem;">Partenariats</h3>
+        <div class="partner-item">
+          <div class="partner-icon">X</div>
+          <div class="partner-info">
+            <h4>XsintIntelligence</h4>
+            <p>OSINT et Threat Intelligence — <a href="https://www.xsint-intelligence.com/" target="_blank"
+                rel="noopener">xsint-intelligence.com</a></p>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">O</div>
+          <div class="partner-info">
+            <h4>OSINTCAT</h4>
+            <p>Staff et modérateur — <a href="https://osintcat.net" target="_blank" rel="noopener">osintcat.net</a></p>
+          </div>
+        </div>
+        <div class="partner-item">
+          <div class="partner-icon">M</div>
+          <div class="partner-info">
+            <h4>Microsoft Security Team</h4>
+            <p>Programme de divulgation responsable</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="fade-in">
+    <div class="section-header">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">Travaillons ensemble</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Discutons de votre projet</h3>
+        <p>Besoin d'un audit de sécurité, d'un test d'intrusion ou d'une analyse de vulnérabilités ? Je suis disponible
+          pour vos missions.</p>
+        <div class="contact-links">
+          <a href="https://github.com/NSAexploit" target="_blank" rel="noopener" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            github.com/NSAexploit
+          </a>
+          <a href="https://tryhackme.com/p/MatteuOB" target="_blank" rel="noopener" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            TryHackMe
+          </a>
+        </div>
+      </div>
+      <form id="contactForm" class="contact-form" autocomplete="off">
+        <input type="text" name="name" placeholder="Votre nom" required>
+        <input type="email" name="email" placeholder="Votre email" required>
+        <textarea name="message" placeholder="Votre message" required></textarea>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Envoyer</button>
+        <div id="formMessage"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Matteu Olivieri Bastiani</div>
+    <p class="footer-text">© 2026 — Expert en cybersécurité offensive</p>
+  </footer>
+
+  <button id="scrollTopBtn" aria-label="Retour en haut">↑</button>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('active');
+    }
+
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      scrollTopBtn.classList.toggle('show', window.scrollY > 500);
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        if (scrollY >= section.offsetTop - 100) current = section.getAttribute('id');
+      });
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+      });
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formMessage = document.getElementById('formMessage');
+
+      try {
+        const response = await fetch('https://formspree.io/f/xgvyjlwe', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+
+        formMessage.textContent = response.ok ? 'Message envoyé avec succès.' : 'Erreur lors de l\'envoi.';
+        formMessage.className = response.ok ? 'success' : 'error';
+        formMessage.style.display = 'block';
+        if (response.ok) form.reset();
+      } catch (err) {
+        formMessage.textContent = 'Erreur réseau.';
+        formMessage.className = 'error';
+        formMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+
+</html>
